@@ -1,276 +1,163 @@
-\# Single-Cycle MIPS Processor
+# Single-Cycle MIPS Processor
 
+A **single-cycle MIPS processor implemented in VHDL** using **Xilinx ISE**. The processor was built from individual RTL modules and integrated into a complete datapath capable of executing arithmetic, memory, and branch instructions.
 
+## Features
 
-A single-cycle \*\*MIPS processor implemented in VHDL\*\* using \*\*Xilinx ISE\*\*.
+* Single-cycle MIPS datapath
+* Modular RTL design in VHDL
+* Register file with register read/write operations
+* Arithmetic and logical ALU operations
+* Instruction and data memory
+* Centralized instruction decoding and control logic
+* Branch address calculation
+* Immediate-value sign extension
+* Module-level and processor-level testbenches
+* Simulation and debugging using ISim waveforms
 
+### Supported Instructions
 
+| Instruction | Operation            |
+| ----------- | -------------------- |
+| `add`       | Register addition    |
+| `sub`       | Register subtraction |
+| `slt`       | Set on less than     |
+| `lw`        | Load word            |
+| `sw`        | Store word           |
+| `beq`       | Branch if equal      |
 
-The project implements the main hardware components of a MIPS processor and integrates them into a complete datapath capable of executing a subset of MIPS instructions.
+## Architecture
 
-
-
-\## Overview
-
-
-
-The processor follows a single-cycle architecture in which each instruction is fetched, decoded, executed, and completed within one clock cycle.
-
-
-
-The implemented datapath supports instructions including:
-
-
-
-\* `add`
-
-\* `sub`
-
-\* `slt`
-
-\* `lw`
-
-\* `sw`
-
-\* `beq`
-
-
-
-\## Architecture
-
-
-
-The processor is built from several hardware modules that work together to form the complete datapath.
-
-
-
-\### Main Components
-
-
-
-\* ALU
-
-\* Register File
-
-\* Program Counter (PC)
-
-\* Instruction Memory
-
-\* Data Memory
-
-\* Control Unit
-
-\* ALU Control
-
-\* 2-to-1 Multiplexers
-
-\* Sign Extension Unit
-
-\* Shift-Left Unit
-
-\* Adder
-
-
-
-\### Datapath
-
-
+The processor follows a conventional single-cycle MIPS datapath:
 
 ```text
-
-&#x20;                ┌─────────────────┐
-
-&#x20;                │ Program Counter │
-
-&#x20;                └────────┬────────┘
-
-&#x20;                         │
-
-&#x20;                         ▼
-
-&#x20;               ┌───────────────────┐
-
-&#x20;               │ Instruction Memory│
-
-&#x20;               └─────────┬─────────┘
-
-&#x20;                         │
-
-&#x20;             ┌───────────┴───────────┐
-
-&#x20;             │                       │
-
-&#x20;             ▼                       ▼
-
-&#x20;      ┌─────────────┐         ┌──────────────┐
-
-&#x20;      │ Register    │         │ Control Unit │
-
-&#x20;      │ File        │         └──────┬───────┘
-
-&#x20;      └──────┬──────┘                │
-
-&#x20;             │                       │
-
-&#x20;             ▼                       ▼
-
-&#x20;         ┌─────────────────────────────┐
-
-&#x20;         │             ALU             │
-
-&#x20;         └──────────────┬──────────────┘
-
-&#x20;                        │
-
-&#x20;                        ▼
-
-&#x20;                 ┌─────────────┐
-
-&#x20;                 │ Data Memory │
-
-&#x20;                 └──────┬──────┘
-
-&#x20;                        │
-
-&#x20;                        ▼
-
-&#x20;                 ┌─────────────┐
-
-&#x20;                 │ Write Back  │
-
-&#x20;                 └─────────────┘
-
+                    ┌─────────────────┐
+                    │ Program Counter │
+                    └────────┬────────┘
+                             │
+                             ▼
+                   ┌───────────────────┐
+                   │ Instruction Memory│
+                   └─────────┬─────────┘
+                             │
+                  ┌──────────┴──────────┐
+                  │                     │
+                  ▼                     ▼
+           ┌─────────────┐      ┌──────────────┐
+           │ Register    │      │ Control Unit │
+           │ File        │      └──────┬───────┘
+           └──────┬──────┘             │
+                  │                    │
+                  └─────────┬──────────┘
+                            ▼
+                    ┌─────────────┐
+                    │     ALU     │
+                    └──────┬──────┘
+                           │
+                           ▼
+                    ┌─────────────┐
+                    │ Data Memory │
+                    └──────┬──────┘
+                           │
+                           ▼
+                    ┌─────────────┐
+                    │  Write Back │
+                    └─────────────┘
 ```
 
+## Design
 
+The processor was developed as a collection of independent hardware modules before being integrated into the top-level MIPS design.
 
-\## Supported Instructions
+### Core Modules
 
+* **Program Counter** — Maintains the address of the current instruction.
+* **Instruction Memory** — Supplies instructions to the processor.
+* **Register File** — Provides register read and write functionality.
+* **ALU** — Performs arithmetic and comparison operations.
+* **Control Unit** — Generates the main control signals based on the instruction opcode.
+* **ALU Control** — Determines the specific ALU operation.
+* **Data Memory** — Handles memory accesses for load and store instructions.
+* **Sign Extension** — Extends immediate values to the required datapath width.
+* **Adders** — Used for sequential PC updates and branch-address calculations.
+* **Shift Left** — Used in branch target address generation.
+* **Multiplexers** — Control the selection of datapath inputs.
 
+## Verification
 
-| Instruction | Type   | Operation             |
+Each major component was tested independently before integration into the complete processor.
 
-| ----------- | ------ | --------------------- |
+The full processor was then simulated using **ISim**, with waveform analysis used to verify datapath behavior and debug integration issues.
 
-| `add`       | R-type | Register addition     |
+Verification included:
 
-| `sub`       | R-type | Register subtraction  |
+* ALU arithmetic and comparison operations
+* Register file reads and writes
+* Instruction decoding
+* Control-signal generation
+* Load/store operations
+* Branch behavior
+* Datapath signal propagation
+* Processor-level instruction execution
 
-| `slt`       | R-type | Set on less than      |
-
-| `lw`        | I-type | Load word from memory |
-
-| `sw`        | I-type | Store word to memory  |
-
-| `beq`       | I-type | Branch if equal       |
-
-
-
-\## Project Structure
-
-
+## Project Structure
 
 ```text
-
-.
-
-├── MIPS/
-
+MIPS/
 ├── ALU/
-
+├── MIPS/
 ├── PC/
-
-├── reg\_file/
-
-├── control\_unit/
-
-├── alu\_control/
-
-├── instruction\_memory/
-
-├── memory\_unit/
-
-├── MUX\_2\_1/
-
+├── reg_file/
+├── instruction_memory/
+├── memory_unit/
+├── control_unit/
+├── alu_control/
+├── MUX_2_1/
 ├── Adder/
-
 ├── ShiftLeft/
-
-├── sign\_ext/
-
-└── ...
-
+├── sign_ext/
+└── testbenches/
 ```
 
+The repository contains the VHDL source files and project configuration required to inspect the individual modules and processor design.
 
+## Technologies
 
-Each module was developed and tested individually before being integrated into the complete processor.
+**Hardware Description Language**
 
+* VHDL
 
+**Development & Simulation**
 
-\## Testing
+* Xilinx ISE
+* ISim
 
+**Concepts**
 
+* RTL design
+* CPU datapath architecture
+* MIPS instruction execution
+* Digital logic
+* Combinational and sequential logic
+* Hardware modularization
+* Testbench development
+* Waveform-based debugging
 
-Testbenches were developed for the individual hardware modules and for the complete MIPS processor.
+## What I Learned
 
+This project provided hands-on experience with the internal structure of a processor, from individual RTL components to a functioning instruction datapath.
 
+Key areas included:
 
-The testbenches were used to verify:
+* Translating processor architecture into RTL
+* Designing hardware modules with clear interfaces
+* Connecting datapath components through control signals
+* Understanding how instructions propagate through a CPU
+* Debugging hardware behavior through simulation waveforms
+* Integrating independently tested modules into a larger digital system
 
+## Project Status
 
+**Completed**
 
-\* ALU operations
-
-\* Register file reads and writes
-
-\* Memory operations
-
-\* Control signals
-
-\* ALU control signals
-
-\* Multiplexer behavior
-
-\* Sign extension
-
-\* Branch operations
-
-\* Complete processor execution
-
-
-
-Simulation waveforms were analyzed using Xilinx ISE's simulation tools to identify and debug datapath and control-signal issues.
-
-
-
-\## Tools
-
-
-
-\* \*\*VHDL\*\*
-
-\* \*\*Xilinx ISE\*\*
-
-\* \*\*ISim\*\*
-
-\* Digital logic design
-
-\* Computer architecture
-
-
-
-\## Implementation
-
-
-
-The processor was designed by first implementing and testing individual components, including the ALU, register file, memories, control logic, and supporting datapath components.
-
-
-
-These modules were then integrated to form the complete single-cycle MIPS datapath.
-
-
-
-Simulation was used throughout development to verify functionality and debug incorrect control signals and datapath behavior.
-
+The processor and its major supporting modules have been implemented and tested through simulation.
