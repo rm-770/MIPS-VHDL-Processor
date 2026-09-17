@@ -1,0 +1,38 @@
+﻿# Xilinx ISE generated files
+*.ngc
+*.ngr
+*.syr
+*.xrpt
+*.xmsgs
+*.cmd_log
+*.log
+*.stx
+*.wdb
+*.gise
+*.xise
+*.ise
+*.iso
+*.nar
+*.par
+*.bld
+*.mcs
+*.bit
+
+# Xilinx simulation / generated directories
+isim/
+xilinxsim/
+fuse/
+webtalk_pn/
+pepxtract/
+xst/
+
+# Generated synthesis/simulation files
+*_summary
+*_envsettings
+*_stx_beh.prj
+*_isim_beh
+*_isim_beh*.wdb
+
+# OS files
+.DS_Store
+Thumbs.db

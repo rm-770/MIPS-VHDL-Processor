@@ -1,0 +1,5 @@
+set -tmpdir "/home/ise/rita_mips231011034/xst/projnav.tmp"
+set -xsthdpdir "/home/ise/rita_mips231011034/xst"
+elaborate
+-ifn alu_control.prj
+-ifmt mixed

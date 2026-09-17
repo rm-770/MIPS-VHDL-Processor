@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -o "/home/ise/rita_mips231011034/mips_test_isim_beh.exe" -prj "/home/ise/rita_mips231011034/mips_test_beh.prj" "work.mips_test" 

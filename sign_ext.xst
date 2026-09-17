@@ -1,0 +1,5 @@
+set -tmpdir "D:/Student/Desktop/rita_mips231011034/xst/projnav.tmp"
+set -xsthdpdir "D:/Student/Desktop/rita_mips231011034/xst"
+elaborate
+-ifn sign_ext.prj
+-ifmt mixed
